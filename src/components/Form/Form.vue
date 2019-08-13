@@ -38,39 +38,44 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Form",
+  data() {
+    return {};
+  },
 
   computed: {
-    ...mapGetters(["getUserLogin, getUserPassword"]),
-
+    ...mapGetters({
+      getUserLogin: "getUserLogin",
+      getUserPassword: "getUserPassword"
+    }),
     userLogin: {
       get() {
-        return this.getUserLogin//this.$store.state.userLogin;
+        return this.getUserLogin;
       },
       set(login) {
-         this.setUserLogin(login)
-      //  this.$store.dispatch('setUserLogin', login)
+        this.setUserLogin(login);
       }
     },
     userPassword: {
       get() {
-        return this.getUserPassword//this.$store.state.userPassword;
+        return this.getUserPassword;
       },
-      set (pass) {
-        this.setUserLogin(pass)
-     //   this.$store.dispatch('setUserPassword', pass)
+      set(pass) {
+        this.setUserPassword(pass);
       }
-    },
-
+    }
   },
   methods: {
-    ...mapActions(["store/setUserLogin, store/setUserPassword"]),
-    submitUserData(){
-      console.log(this.$store, "mapActions([setUserLogin, setUserPassword])", mapActions(["setUserLogin, setUserPassword"]));
-      console.log({userLogin:null, userPassword: this.userLogin});
-
+    ...mapActions({
+      setUserLogin: "setUserLogin",
+      setUserPassword: "setUserPassword"
+    }),
+    submitUserData() {
+      console.log({
+        userLogin: this.getUserLogin,
+        userPassword: this.getUserPassword
+      });
     }
-  }
-
+  },
 };
 </script>
 
@@ -139,7 +144,7 @@ export default {
       font-size: 14px;
       line-height: 16px;
       font-family: inherit;
-      outline:none;
+      outline: none;
       &::placeholder {
         color: #a7b7c9;
       }
