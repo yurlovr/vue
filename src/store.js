@@ -6,20 +6,19 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     userLogin: "",
-    userPassword: "",
+    userPassword: ""
   },
   getters: {
-    getUserLogin: state => {return state.userLogin},
-    getUserPassword: state => {return state.userPassword},
+    getUserLogin: state => state.userLogin,
+    getUserPassword: state => state.userPassword
   },
   mutations: {
-    SET_LOGIN: (state, payload) => {
-      state.userLogin = payload;
-    },
-    SET_PASSWORD: (state, payload) => {
-      state.userPassword = payload;
-    },
+    SET_USER_LOGIN: (state, payload) => (state.userLogin = payload),
+    SET_USER_PASSWORD: (state, payload) => (state.userPassword = payload)
   },
   actions: {
+    setUserLogin: ({ commit }, payload) => commit("SET_USER_LOGIN", payload),
+    setUserPassword: ({ commit }, payload) =>
+      commit("SET_USER_PASSWORD", payload)
   }
 });

@@ -1,8 +1,11 @@
 <template>
     <header class="app__header">
+        <div>
         <h1 class="app__header-main">
             Teleop
         </h1>
+        <span>Язык русский</span>
+        </div>
     </header>
 </template>
 

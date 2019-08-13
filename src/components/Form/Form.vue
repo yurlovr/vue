@@ -1,6 +1,6 @@
 <template>
   <section class="form">
-    <form action="/" method="post">
+    <form v-on:submit.prevent>
       <p class="form__header">
         Войти в систему
       </p>
@@ -27,7 +27,7 @@
         </div>
         <a class="form__restore-pass" href="/">Восстановить пароль</a>
         <div class="form__footer">
-          <button class="button" @click="sendForm">Войти</button>
+          <button class="button" @click="submitUserData">Войти</button>
         </div>
       </section>
     </form>
@@ -35,30 +35,42 @@
 </template>
 
 <script>
-//import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Form",
 
   computed: {
-    //...mapGetters(["getUserLogin, getUserPassword"]),
+    ...mapGetters(["getUserLogin, getUserPassword"]),
 
     userLogin: {
       get() {
-        return this.$store.state.userLogin.message;
+        return this.getUserLogin//this.$store.state.userLogin;
       },
       set(login) {
-        this.$store.commit("SET_LOGIN", login);
+         this.setUserLogin(login)
+      //  this.$store.dispatch('setUserLogin', login)
       }
     },
     userPassword: {
       get() {
-        return this.$store.state.userPassword.message;
+        return this.getUserPassword//this.$store.state.userPassword;
       },
-      set(pass) {
-        this.$store.commit("SET_PASSWORD", pass);
+      set (pass) {
+        this.setUserLogin(pass)
+     //   this.$store.dispatch('setUserPassword', pass)
       }
+    },
+
+  },
+  methods: {
+    ...mapActions(["store/setUserLogin, store/setUserPassword"]),
+    submitUserData(){
+      console.log(this.$store, "mapActions([setUserLogin, setUserPassword])", mapActions(["setUserLogin, setUserPassword"]));
+      console.log({userLogin:null, userPassword: this.userLogin});
+
     }
   }
+
 };
 </script>
 
@@ -127,6 +139,7 @@ export default {
       font-size: 14px;
       line-height: 16px;
       font-family: inherit;
+      outline:none;
       &::placeholder {
         color: #a7b7c9;
       }
