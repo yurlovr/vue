@@ -87,12 +87,12 @@ export default {
     noAuth: {
       get() {
         return this.getNoAuth;
-      }
+      },
     },
 
-    isDisabled: function () {return (!this.userLogin || !this.userPassword)},
-
-
+      isDisabled: function () {
+        return (!this.userLogin || !this.userPassword)
+      },
   },
   methods: {
     ...mapActions(["setUserLogin", "setUserPassword", "setUserData"]),

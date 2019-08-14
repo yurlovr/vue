@@ -1,6 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-import store from "./store";
+import store from "./store/index";
 import i18next from "i18next";
 import VueI18Next from "@panter/vue-i18next";
 import { LOCALES_FOR_118 } from "@/locales/locales";

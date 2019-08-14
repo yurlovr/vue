@@ -17,16 +17,15 @@
 
 <script>
 import { mapGetters,mapActions } from "vuex";
-import dropdown from "vue-dropdowns";
-import { LANGUAGES, COUNTRY } from "@/locales/locales";
+import dropdown from "../components/DropDown/DropDown";
+import { LANGUAGES, COUNTRY } from "../locales/locales";
 
 export default {
   name: "Header",
   data() {
     return {
-      arrayOfLanguage: LANGUAGES.map(lang => {return {...lang, name: lang.name[0].toUpperCase() + lang.name.slice(1)}}),
+      arrayOfLanguage: LANGUAGES,
       selectedLanguage: {
-            // ...LANGUAGE.find(lang => lang.id === COUNTRY.RUS),
             name: LANGUAGES.find(lang => lang.id === COUNTRY.RUS).name.toLowerCase()
           },
         }
@@ -51,14 +50,13 @@ export default {
     },
     methodToRunOnSelect(payload) {
       this.selectedLanguage = payload.name.toLowerCase();
-      console.log(this.selectedLanguage);
       this.changeLanguage(payload.id);
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app__header {
   position: relative;
   padding-top: 20px;
@@ -86,32 +84,6 @@ export default {
       cursor: pointer;
       color: #48bdff;
     }
-  }
-
-  & .btn-group {
-    position: absolute;
-    top: 16px;
-    right: 0;
-    font-size: 13px;
-  }
-
-  & .dropdown-toggle {
-    color: #48bdff;
-    background-image: none;
-    &:hover {
-      background: none;
-    }
-  }
-
-  & .dropdown-menu {
-    font-size: 13px;
-    & > li > a {
-      text-align: center;
-    }
-  }
-
-  & .caret {
-    display: none;
   }
 }
 </style>

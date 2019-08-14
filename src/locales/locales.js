@@ -21,8 +21,8 @@ export const LOCALES = {
 };
 
 export const LANGUAGES = [
-  { name: "pусский", id: "rus" },
-  { name: "english", id: "eng" }
+  { name: "Русский", id: "rus" },
+  { name: "English", id: "eng" }
 ];
 
 export const COUNTRY = {
