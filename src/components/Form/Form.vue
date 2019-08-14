@@ -16,7 +16,7 @@
             type="text"
             name="login"
             v-model="userLogin"
-            placeholder= ""
+            :placeholder= "$t('login')"
             required
           />
         </div>
@@ -26,7 +26,7 @@
             @focus="onFocus"
             type="password"
             name="password"
-            placeholder=""
+            :placeholder="$t('password')"
             v-model="userPassword"
             required
           />
