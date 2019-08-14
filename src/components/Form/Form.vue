@@ -2,32 +2,54 @@
   <section class="form">
     <form v-on:submit.prevent>
       <p class="form__header">
-        Войти в систему
+        {{$t("enterSystem") }}
       </p>
       <section class="form__content">
+        <span
+          class="robot__icon"
+          :class="{ smile: !noAuth, sad: noAuth }"
+        ></span>
         <div class="form__input -login">
           <input
+            :class="{ error: noAuth }"
+            @focus="onFocus"
             type="text"
             name="login"
             v-model="userLogin"
-            placeholder="Логин"
+            placeholder= ""
             required
           />
         </div>
         <div class="form__input -lock">
           <input
-            class="error"
+            :class="{ error: noAuth }"
+            @focus="onFocus"
             type="password"
             name="password"
-            placeholder="Пароль"
+            placeholder=""
             v-model="userPassword"
             required
           />
-          <span class="error__text">Неверный логин или пароль</span>
+          <span class="error__text" v-if="noAuth"
+            >{{$t('authError') }}</span
+          >
         </div>
-        <a class="form__restore-pass" href="/">Восстановить пароль</a>
+        <a
+          class="form__restore-pass"
+          href="/"
+          @click.prevent
+          :style="{ marginTop: noAuth ? '1px' : '20px' }"
+          >
+          {{$t('restorePassword') }}
+        </a>
         <div class="form__footer">
-          <button class="button" @click="submitUserData">Войти</button>
+          <button
+            class="button"
+            :class="{ disabled: isDisabled }"
+            @click="submitUserData"
+          >
+            {{$t('enter') }}
+          </button>
         </div>
       </section>
     </form>
@@ -36,17 +58,16 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "Form",
   data() {
-    return {};
+    return {
+    };
   },
 
   computed: {
-    ...mapGetters({
-      getUserLogin: "getUserLogin",
-      getUserPassword: "getUserPassword"
-    }),
+    ...mapGetters(["getUserLogin", "getUserPassword", "getNoAuth"]),
     userLogin: {
       get() {
         return this.getUserLogin;
@@ -62,19 +83,40 @@ export default {
       set(pass) {
         this.setUserPassword(pass);
       }
-    }
+    },
+    noAuth: {
+      get() {
+        return this.getNoAuth;
+      }
+    },
+
+    isDisabled: function () {return (!this.userLogin || !this.userPassword)},
+
+
   },
   methods: {
-    ...mapActions({
-      setUserLogin: "setUserLogin",
-      setUserPassword: "setUserPassword"
-    }),
+    ...mapActions(["setUserLogin", "setUserPassword", "setUserData"]),
     submitUserData() {
-      console.log({
-        userLogin: this.getUserLogin,
-        userPassword: this.getUserPassword
-      });
-    }
+      if (this.isDisabled) {
+        return;
+      }
+      let obj = {
+        default: false,
+        userLogin: this.userLogin,
+        userPassword: this.userPassword
+      };
+      this.setUserData(obj);
+    },
+    onFocus() {
+      if (this.noAuth) {
+        let obj = {
+          default: true,
+          userLogin: "",
+          userPassword: ""
+        };
+        this.setUserData(obj);
+      }
+    },
   },
 };
 </script>
@@ -83,6 +125,7 @@ export default {
 .form {
   min-width: 300px;
   z-index: 1;
+
   &__header {
     font-size: 16px;
     line-height: 18px;
@@ -95,32 +138,40 @@ export default {
     border-bottom: 1px #e2ebf5 solid;
     margin: 0;
   }
+
   &__content {
     position: relative;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     background-color: #fff;
     padding-top: 20px;
-    &:before {
+
+    & .robot__icon {
       position: absolute;
       content: "";
       bottom: 23px;
       right: -63px;
       width: 100px;
       height: 80px;
-      background-image: url("../../images/robo-smile.svg");
       background-repeat: no-repeat;
       z-index: -1;
+      &.smile {
+        background-image: url("../../images/robo-smile.svg");
+      }
+      &.sad {
+        background-image: url("../../images/robo-sad.svg");
+      }
     }
   }
+
   &__input {
     position: relative;
-    padding: 9px 20px;
+    padding: 8px 20px;
     padding-left: 60px;
 
     &:before {
       position: absolute;
-      top: 10px;
+      top: 11px;
       left: 25px;
       content: "";
       width: 24px;
@@ -131,10 +182,12 @@ export default {
     &.-login:before {
       background-image: url("../../images/login.svg");
     }
+
     &.-lock:before {
       left: 22px;
       background-image: url("../../images/lock.svg");
     }
+
     & input {
       min-width: 200px;
       background: #f4f7fd;
@@ -145,14 +198,16 @@ export default {
       line-height: 16px;
       font-family: inherit;
       outline: none;
+
       &::placeholder {
         color: #a7b7c9;
       }
 
       &.error {
-        box-shadow: 0 0 0 1px #ff4848;
+        box-shadow: inset 0 0 0 1px #ff4848;
       }
     }
+
     .error__text {
       display: block;
       margin-top: 5px;
@@ -188,6 +243,12 @@ export default {
       border-bottom-left-radius: 8px;
       border-bottom-right-radius: 8px;
       cursor: pointer;
+      outline: none;
+
+      &.disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
     }
   }
 }
