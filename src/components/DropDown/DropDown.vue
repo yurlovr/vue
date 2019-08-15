@@ -54,7 +54,7 @@ export default {
 .btn-group {
   position: absolute;
   top: 16px;
-  right: -22px;
+  right: 0;
   font-size: 13px;
   min-width: 160px;
   height: 40px;
@@ -87,16 +87,15 @@ export default {
 
 .dropdown-menu {
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 70%;
+  left: 38px;
   z-index: 1000;
   float: left;
-  min-width: 160px;
+  width: 100px;
   padding: 5px 0;
   margin: 2px 0 0;
   list-style: none;
   font-size: 13px;
-  text-align: left;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -110,7 +109,7 @@ export default {
     margin: 0;
 
     & > a {
-      padding: 10px 30px;
+      padding: 10px 0;
       display: block;
       clear: both;
       font-weight: normal;

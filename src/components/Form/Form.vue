@@ -1,46 +1,57 @@
 <template>
   <section class="form">
     <form v-on:submit.prevent>
-      <p class="form__header">
-        {{$t("enterSystem") }}
-      </p>
+      <h2 class="form__header">
+        {{ this.mode === MODE.AUTH ? $t("enterSystem") : $t("recovery") }}
+      </h2>
       <section class="form__content">
+        <h3
+          class="form__header -instruction"
+          v-if="this.mode === MODE.RECOVERY"
+        >
+          {{ $t("instruction") }}
+        </h3>
+
         <span
           class="robot__icon"
           :class="{ smile: !noAuth, sad: noAuth }"
         ></span>
-        <div class="form__input -login">
+        <div
+          class="form__input"
+          :class="this.mode === MODE.AUTH ? '-login' : '-email'"
+        >
           <input
             :class="{ error: noAuth }"
             @focus="onFocus"
-            type="text"
-            name="login"
-            v-model="userLogin"
-            :placeholder= "$t('login')"
+            :type="this.mode === MODE.AUTH ? 'text' : 'email'"
+            :name="this.mode === MODE.AUTH ? 'login' : 'email'"
+            :value="this.mode === MODE.AUTH ? userLogin : userEmail"
+            @input="changeInputValue"
+            :placeholder="this.mode === MODE.AUTH ? $t('login') : $t('email')"
             required
           />
         </div>
-        <div class="form__input -lock">
+        <div class="form__input -lock" v-if="this.mode === MODE.AUTH">
           <input
-            :class="{ error: noAuth }"
-            @focus="onFocus"
+            :class="{ error: noAuth || !emailNotValid }"
             type="password"
             name="password"
-            :placeholder="$t('password')"
             v-model="userPassword"
+            :placeholder="$t('password')"
+            @focus="onFocus"
             required
           />
-          <span class="error__text" v-if="noAuth"
-            >{{$t('authError') }}</span
-          >
+          <span class="error__text" v-if="noAuth">{{ $t("authError") }}</span>
         </div>
         <a
           class="form__restore-pass"
           href="/"
-          @click.prevent
+          id="recovery"
+          v-if="this.mode === MODE.AUTH"
+          @click.prevent="changeMode"
           :style="{ marginTop: noAuth ? '1px' : '20px' }"
-          >
-          {{$t('restorePassword') }}
+        >
+          {{ $t("restorePassword") }}
         </a>
         <div class="form__footer">
           <button
@@ -48,7 +59,7 @@
             :class="{ disabled: isDisabled }"
             @click="submitUserData"
           >
-            {{$t('enter') }}
+            {{ this.mode === MODE.AUTH ? $t("enter") : $t("send") }}
           </button>
         </div>
       </section>
@@ -58,16 +69,24 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { MODE } from "@/store/modules/user/const";
 
 export default {
   name: "Form",
   data() {
     return {
+      MODE
     };
   },
 
   computed: {
-    ...mapGetters(["getUserLogin", "getUserPassword", "getNoAuth"]),
+    ...mapGetters([
+      "getUserLogin",
+      "getUserPassword",
+      "getUserEmail",
+      "getNoAuth",
+      "getMode"
+    ]),
     userLogin: {
       get() {
         return this.getUserLogin;
@@ -84,40 +103,98 @@ export default {
         this.setUserPassword(pass);
       }
     },
+    userEmail: {
+      get() {
+        return this.getUserEmail;
+      },
+      set(mail) {
+        this.setUserEmail(mail);
+      }
+    },
     noAuth: {
       get() {
         return this.getNoAuth;
-      },
+      }
+    },
+    mode: {
+      get() {
+        return this.getMode;
+      }
     },
 
-      isDisabled: function () {
-        return (!this.userLogin || !this.userPassword)
-      },
+    isDisabled: function() {
+      return this.mode === MODE.AUTH
+        ? !this.userLogin || !this.userPassword
+        : this.emailNotValid();
+    }
   },
   methods: {
-    ...mapActions(["setUserLogin", "setUserPassword", "setUserData"]),
+    ...mapActions([
+      "setUserLogin",
+      "setUserPassword",
+      "setUserEmail",
+      "setUserData",
+      "setMode"
+    ]),
     submitUserData() {
       if (this.isDisabled) {
         return;
       }
-      let obj = {
-        default: false,
-        userLogin: this.userLogin,
-        userPassword: this.userPassword
-      };
-      this.setUserData(obj);
-    },
-    onFocus() {
-      if (this.noAuth) {
+      if (this.mode === MODE.AUTH) {
         let obj = {
-          default: true,
-          userLogin: "",
-          userPassword: ""
+          default: false,
+          userLogin: this.userLogin,
+          userPassword: this.userPassword
+        };
+
+        this.setUserData(obj);
+      } else {
+        //обработка отправки email
+        let obj = {
+          userEmail: this.userEmail
+        };
+        console.log(obj);
+      }
+    },
+
+    onFocus() {
+      if (this.noAuth && this.mode === MODE.AUTH) {
+        let obj = {
+          default: true
         };
         this.setUserData(obj);
       }
     },
-  },
+    changeMode(event) {
+      let target = event.target.id;
+      this.setMode(target.toUpperCase());
+      this.setUserData({ default: true });
+    },
+    changeInputValue(event) {
+      let value = event.target.value;
+      switch (this.mode) {
+        case MODE.AUTH:
+          this.userLogin = value;
+          break;
+        case MODE.RECOVERY:
+          this.userEmail = value;
+          break;
+        default:
+          return;
+      }
+    },
+    emailNotValid() {
+      let reg = new RegExp(
+        // eslint-disable-next-line
+        /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+      );
+      if (!this.userEmail) {
+        return true;
+      } else {
+        return !reg.test(this.userEmail);
+      }
+    }
+  }
 };
 </script>
 
@@ -128,6 +205,7 @@ export default {
 
   &__header {
     font-size: 16px;
+    font-weight: normal;
     line-height: 18px;
     padding: 20px 0;
     text-align: center;
@@ -137,6 +215,15 @@ export default {
     border-top-right-radius: 8px;
     border-bottom: 1px #e2ebf5 solid;
     margin: 0;
+    &.-instruction {
+      max-width: 250px;
+      margin: 0 auto;
+      padding-top: 0;
+      padding-bottom: 12px;
+      border-bottom: 0;
+      font-size: 14px;
+      text-align: left;
+    }
   }
 
   &__content {
@@ -181,6 +268,13 @@ export default {
 
     &.-login:before {
       background-image: url("../../images/login.svg");
+    }
+
+    &.-email {
+      margin-bottom: 30px;
+      &:before {
+        background-image: url("../../images/email.svg");
+      }
     }
 
     &.-lock:before {

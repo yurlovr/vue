@@ -9,7 +9,7 @@ export const LOCALES = {
     authError: "Wrong login or password",
     send: "Send",
     email: "Email",
-    instructions: "Recovery Instructions password will be sent to the mail",
+    instruction: "Recovery Instructions password will be sent to the mail",
     recovery: "Password recovery",
   },
 
@@ -23,7 +23,7 @@ export const LOCALES = {
     authError: "Неверный логин или пароль",
     send: "Отправить",
     email: "Электронная почта",
-    instructions: "Инструкция по восстановлению пароля будет отправлена на почту",
+    instruction: "Инструкция по восстановлению пароля будет отправлена на почту",
     recovery: "Восстановление пароля",
   }
 };

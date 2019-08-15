@@ -60,7 +60,7 @@ export default {
 .app__header {
   position: relative;
   padding-top: 20px;
-  height: 10vh;
+  height: calc(10vh - 20px);
   text-align: center;
 
   &-main {
@@ -76,7 +76,7 @@ export default {
     position: absolute;
     width: 130px;
     top: 20px;
-    right: 15px;
+    right: 35px;
     text-align: start;
     font-size: 15px;
     color: #96b3d2;

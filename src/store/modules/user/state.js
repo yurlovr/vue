@@ -1,4 +1,8 @@
+import { MODE } from "@/store/modules/user/const";
+
 export default {
   userLogin: "",
-  userPassword: ""
+  userPassword: "",
+  userEmail: "",
+  mode: MODE.AUTH,
 };
