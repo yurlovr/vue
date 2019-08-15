@@ -1,1 +1,1 @@
-export const getNoAuth = state => state.noAuth;
+export const getNoAuth = state => state.noAuth

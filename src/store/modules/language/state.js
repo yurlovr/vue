@@ -1,3 +1,3 @@
 export default {
-  lang: "rus"
-};
+  lang: 'rus'
+}

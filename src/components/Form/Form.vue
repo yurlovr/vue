@@ -1,65 +1,65 @@
 <template>
-  <section class="form">
+  <section class='form'>
     <form v-on:submit.prevent>
-      <h2 class="form__header">
-        {{ this.mode === MODE.AUTH ? $t("enterSystem") : $t("recovery") }}
+      <h2 class='form__header'>
+        {{ this.mode === MODE.AUTH ? $t('enterSystem') : $t('recovery') }}
       </h2>
-      <section class="form__content">
+      <section class='form__content'>
         <h3
-          class="form__header -instruction"
-          v-if="this.mode === MODE.RECOVERY"
+          class='form__header -instruction'
+          v-if='this.mode === MODE.RECOVERY'
         >
-          {{ $t("instruction") }}
+          {{ $t('instruction') }}
         </h3>
 
         <span
-          class="robot__icon"
-          :class="{ smile: !noAuth, sad: noAuth }"
+          class='robot__icon'
+          :class='{ smile: !noAuth, sad: noAuth }'
         ></span>
         <div
-          class="form__input"
-          :class="this.mode === MODE.AUTH ? '-login' : '-email'"
+          class='form__input'
+          :class='this.mode === MODE.AUTH ? "form__input-login" : "form__input-email"'
         >
           <input
-            :class="{ error: noAuth }"
-            @focus="onFocus"
-            :type="this.mode === MODE.AUTH ? 'text' : 'email'"
-            :name="this.mode === MODE.AUTH ? 'login' : 'email'"
-            :value="this.mode === MODE.AUTH ? userLogin : userEmail"
-            @input="changeInputValue"
-            :placeholder="this.mode === MODE.AUTH ? $t('login') : $t('email')"
+            :class='{ error: noAuth }'
+            @focus='onFocus'
+            :type='this.mode === MODE.AUTH ? "text" : "email"'
+            :name='this.mode === MODE.AUTH ? "login" : "email"'
+            :value='this.mode === MODE.AUTH ? userLogin : userEmail'
+            @input='changeInputValue'
+            :placeholder='this.mode === MODE.AUTH ? $t("login") : $t("email")'
             required
           />
         </div>
-        <div class="form__input -lock" v-if="this.mode === MODE.AUTH">
+        <div class='form__input form__input-lock' v-if='this.mode === MODE.AUTH'>
           <input
-            :class="{ error: noAuth || !emailNotValid }"
-            type="password"
-            name="password"
-            v-model="userPassword"
-            :placeholder="$t('password')"
-            @focus="onFocus"
+            :class='{ error: noAuth || !emailNotValid }'
+            type='password'
+            name='password'
+            v-model='userPassword'
+            :placeholder='$t("password")'
+            @focus='onFocus'
             required
           />
-          <span class="error__text" v-if="noAuth">{{ $t("authError") }}</span>
+          <span class='error__text' v-if='noAuth'>{{ $t('authError') }}</span>
         </div>
         <a
-          class="form__restore-pass"
-          href="/"
-          id="recovery"
-          v-if="this.mode === MODE.AUTH"
-          @click.prevent="changeMode"
-          :style="{ marginTop: noAuth ? '1px' : '20px' }"
+          class='form__restore-pass'
+          href='/'
+          id='recovery'
+          v-if='this.mode === MODE.AUTH'
+          @click.prevent='changeMode'
+          :style='{ marginTop: noAuth ? "1px" : "20px" }'
         >
-          {{ $t("restorePassword") }}
+          {{ $t('restorePassword') }}
         </a>
-        <div class="form__footer">
+        <div class='form__footer'>
           <button
-            class="button"
-            :class="{ disabled: isDisabled }"
-            @click="submitUserData"
+            class='button'
+            :class='{ "button-disabled": isDisabled }'
+            @click='submitUserData'
           >
-            {{ this.mode === MODE.AUTH ? $t("enter") : $t("send") }}
+            {{ this.mode === MODE.AUTH ? $t('enter') : $t('send') }}
           </button>
         </div>
       </section>
@@ -68,92 +68,92 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { MODE } from "@/store/modules/user/const";
+import { mapGetters, mapActions } from 'vuex'
+import { MODE } from '@/store/modules/user/const'
 
 export default {
-  name: "Form",
+  name: 'Form',
   data() {
     return {
       MODE
-    };
+    }
   },
 
   computed: {
     ...mapGetters([
-      "getUserLogin",
-      "getUserPassword",
-      "getUserEmail",
-      "getNoAuth",
-      "getMode"
+      'getUserLogin',
+      'getUserPassword',
+      'getUserEmail',
+      'getNoAuth',
+      'getMode'
     ]),
     userLogin: {
       get() {
-        return this.getUserLogin;
+        return this.getUserLogin
       },
       set(login) {
-        this.setUserLogin(login);
+        this.setUserLogin(login)
       }
     },
     userPassword: {
       get() {
-        return this.getUserPassword;
+        return this.getUserPassword
       },
       set(pass) {
-        this.setUserPassword(pass);
+        this.setUserPassword(pass)
       }
     },
     userEmail: {
       get() {
-        return this.getUserEmail;
+        return this.getUserEmail
       },
       set(mail) {
-        this.setUserEmail(mail);
+        this.setUserEmail(mail)
       }
     },
     noAuth: {
       get() {
-        return this.getNoAuth;
+        return this.getNoAuth
       }
     },
     mode: {
       get() {
-        return this.getMode;
+        return this.getMode
       }
     },
 
     isDisabled: function() {
       return this.mode === MODE.AUTH
         ? !this.userLogin || !this.userPassword
-        : this.emailNotValid();
+        : this.emailNotValid()
     }
   },
   methods: {
     ...mapActions([
-      "setUserLogin",
-      "setUserPassword",
-      "setUserEmail",
-      "setUserData",
-      "setMode"
+      'setUserLogin',
+      'setUserPassword',
+      'setUserEmail',
+      'setUserData',
+      'setMode'
     ]),
     submitUserData() {
       if (this.isDisabled) {
-        return;
+        return
       }
       if (this.mode === MODE.AUTH) {
         let obj = {
           default: false,
           userLogin: this.userLogin,
           userPassword: this.userPassword
-        };
+        }
 
-        this.setUserData(obj);
+        this.setUserData(obj)
       } else {
         //обработка отправки email
         let obj = {
           userEmail: this.userEmail
-        };
-        console.log(obj);
+        }
+        console.log(obj)
       }
     },
 
@@ -161,41 +161,41 @@ export default {
       if (this.noAuth && this.mode === MODE.AUTH) {
         let obj = {
           default: true
-        };
-        this.setUserData(obj);
+        }
+        this.setUserData(obj)
       }
     },
     changeMode(event) {
-      let target = event.target.id;
-      this.setMode(target.toUpperCase());
-      this.setUserData({ default: true });
+      let target = event.target.id
+      this.setMode(target.toUpperCase())
+      this.setUserData({ default: true })
     },
     changeInputValue(event) {
-      let value = event.target.value;
+      let value = event.target.value
       switch (this.mode) {
         case MODE.AUTH:
-          this.userLogin = value;
-          break;
+          this.userLogin = value
+          break
         case MODE.RECOVERY:
-          this.userEmail = value;
-          break;
+          this.userEmail = value
+          break
         default:
-          return;
+          return
       }
     },
     emailNotValid() {
       let reg = new RegExp(
         // eslint-disable-next-line
         /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
-      );
+      )
       if (!this.userEmail) {
-        return true;
+        return true
       } else {
-        return !reg.test(this.userEmail);
+        return !reg.test(this.userEmail)
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -235,7 +235,7 @@ export default {
 
     & .robot__icon {
       position: absolute;
-      content: "";
+      content: '';
       bottom: 23px;
       right: -63px;
       width: 100px;
@@ -243,10 +243,10 @@ export default {
       background-repeat: no-repeat;
       z-index: -1;
       &.smile {
-        background-image: url("../../images/robo-smile.svg");
+        background-image: url('../../images/robo-smile.svg');
       }
       &.sad {
-        background-image: url("../../images/robo-sad.svg");
+        background-image: url('../../images/robo-sad.svg');
       }
     }
   }
@@ -260,26 +260,26 @@ export default {
       position: absolute;
       top: 11px;
       left: 25px;
-      content: "";
+      content: '';
       width: 24px;
       height: 24px;
       background-repeat: no-repeat;
     }
 
-    &.-login:before {
-      background-image: url("../../images/login.svg");
+    &-login:before {
+      background-image: url('../../images/login.svg');
     }
 
-    &.-email {
+    &-email {
       margin-bottom: 30px;
       &:before {
-        background-image: url("../../images/email.svg");
+        background-image: url('../../images/email.svg');
       }
     }
 
-    &.-lock:before {
+    &-lock:before {
       left: 22px;
-      background-image: url("../../images/lock.svg");
+      background-image: url('../../images/lock.svg');
     }
 
     & input {
@@ -307,7 +307,7 @@ export default {
       margin-top: 5px;
       padding-left: 10px;
       color: #ff4848;
-      font-family: "Ubuntu Light", serif;
+      font-family: 'Ubuntu Light', serif;
       font-size: 12px;
       line-height: 14px;
       font-weight: lighter;
@@ -339,7 +339,7 @@ export default {
       cursor: pointer;
       outline: none;
 
-      &.disabled {
+      &-disabled {
         opacity: 0.5;
         background-color: #b1bbc5;
         cursor: default;

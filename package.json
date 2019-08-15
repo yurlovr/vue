@@ -51,5 +51,10 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "jsxSingleQuote": false
+  }
 }

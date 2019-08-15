@@ -1,1 +1,1 @@
-export const getLang = state => state.lang;
+export const getLang = state => state.lang

@@ -1,29 +1,33 @@
 <template>
-  <header class="app__header">
-    <p class="app__header-lang -back" v-if="this.mode === MODE.RECOVERY" @click="goPageAuth">
-      Назад
+  <header class='app__header'>
+    <p
+      class='app__header-lang app__header-lang-back'
+      v-if='this.mode === MODE.RECOVERY'
+      @click='goPageAuth'
+    >
+      {{ $t('goBack') }}
     </p>
-    <h1 class="app__header-main">
+    <h1 class='app__header-main'>
       Teleop
     </h1>
-    <p class="app__header-lang">{{ $t("language") }}:</p>
-    <dropdown
-      :options="arrayOfLanguage"
-      :selected="selectedLanguage"
-      v-on:updateOption="methodToRunOnSelect"
+    <p class='app__header-lang'>{{ $t('language') }}:</p>
+    <DropDown
+      :options='arrayOfLanguage'
+      :selected='selectedLanguage'
+      v-on:updateOption='methodToRunOnSelect'
     >
-    </dropdown>
+    </DropDown>
   </header>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import dropdown from "../components/DropDown/DropDown";
-import { LANGUAGES, COUNTRY } from "../locales/locales";
-import { MODE } from "@/store/modules/user/const";
+import { mapGetters, mapActions } from 'vuex'
+import DropDown from '@/components/DropDown/DropDown'
+import { LANGUAGES, COUNTRY } from '../locales/locales'
+import { MODE } from '@/store/modules/user/const'
 
 export default {
-  name: "Header",
+  name: 'Header',
   data() {
     return {
       arrayOfLanguage: LANGUAGES,
@@ -31,40 +35,40 @@ export default {
         name: LANGUAGES.find(lang => lang.id === COUNTRY.RUS).name.toLowerCase()
       },
       MODE
-    };
+    }
   },
   components: {
-    dropdown
+    DropDown
   },
 
   computed: {
-    ...mapGetters(["getLang", "getMode"]),
+    ...mapGetters(['getLang', 'getMode']),
     lang: {
       get() {
-        return this.getLang;
+        return this.getLang
       }
     },
     mode: {
       get() {
-        return this.getMode;
+        return this.getMode
       }
     }
   },
   methods: {
-    ...mapActions(["setLang", "setMode"]),
+    ...mapActions(['setLang', 'setMode']),
     changeLanguage(lang) {
-      this.setLang(lang);
-      this.$i18n.i18next.changeLanguage(lang);
+      this.setLang(lang)
+      this.$i18n.i18next.changeLanguage(lang)
     },
     methodToRunOnSelect(payload) {
-      this.selectedLanguage = payload.name.toLowerCase();
-      this.changeLanguage(payload.id);
+      this.selectedLanguage = payload.name.toLowerCase()
+      this.changeLanguage(payload.id)
     },
-    goPageAuth(){
+    goPageAuth() {
       this.setMode(MODE.AUTH)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -91,7 +95,7 @@ export default {
     text-align: start;
     font-size: 15px;
     color: #96b3d2;
-    &.-back {
+    &-back {
       left: 35px;
       cursor: pointer;
     }
