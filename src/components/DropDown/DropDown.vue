@@ -54,7 +54,7 @@ export default {
 .btn-group {
   position: absolute;
   top: 16px;
-  right: 0;
+  right: -22px;
   font-size: 13px;
   min-width: 160px;
   height: 40px;

@@ -1,5 +1,7 @@
-const ROMAN = "roman";
-const PASS = "qwerty";
+import { postData } from "@/Core";
+
+const NO_AUTH_USER = "user not found";
+const URL_AUTH = "https://192.168.88.60:8443/api/login";
 
 export const setUserData = ({ commit }, payload) => {
   if (payload.default) {
@@ -7,10 +9,18 @@ export const setUserData = ({ commit }, payload) => {
     return;
   }
 
-  if (payload.userLogin !== ROMAN || payload.userPassword !== PASS) {
-    commit("SET_NO_AUTH", true);
-  } else {
-    console.log("есть такой пользователь");
-    commit("SET_NO_AUTH", false);
-  }
+  postData(URL_AUTH, {
+    login: payload.userLogin,
+    password: payload.userPassword
+  })
+    .then(data => {
+      console.log(JSON.stringify(data));
+
+      if (data.message === NO_AUTH_USER) {
+        commit("SET_NO_AUTH", true);
+      } else {
+        commit("SET_NO_AUTH", false);
+      }
+    })
+    .catch(error => console.log(error));
 };

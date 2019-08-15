@@ -247,6 +247,7 @@ export default {
 
       &.disabled {
         opacity: 0.5;
+        background-color: #b1bbc5;
         cursor: default;
       }
     }

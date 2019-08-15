@@ -6,7 +6,11 @@ export const LOCALES = {
     password: "Password",
     restorePassword: "Restore password",
     enter: "Sign in",
-    authError: "Wrong login or password"
+    authError: "Wrong login or password",
+    send: "Send",
+    email: "Email",
+    instructions: "Recovery Instructions password will be sent to the mail",
+    recovery: "Password recovery",
   },
 
   rus: {
@@ -16,7 +20,11 @@ export const LOCALES = {
     password: "Пароль",
     restorePassword: "Восстановить пароль",
     enter: "Войти",
-    authError: "Неверный логин или пароль"
+    authError: "Неверный логин или пароль",
+    send: "Отправить",
+    email: "Электронная почта",
+    instructions: "Инструкция по восстановлению пароля будет отправлена на почту",
+    recovery: "Восстановление пароля",
   }
 };
 
