@@ -1,11 +1,12 @@
 <template>
   <header class="app__header">
+    <p class="app__header-lang -back" v-if="this.mode === MODE.RECOVERY" @click="goPageAuth">
+      Назад
+    </p>
     <h1 class="app__header-main">
       Teleop
     </h1>
-    <p class="app__header-lang">
-      {{ $t("language")}}:
-    </p>
+    <p class="app__header-lang">{{ $t("language") }}:</p>
     <dropdown
       :options="arrayOfLanguage"
       :selected="selectedLanguage"
@@ -16,9 +17,10 @@
 </template>
 
 <script>
-import { mapGetters,mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import dropdown from "../components/DropDown/DropDown";
 import { LANGUAGES, COUNTRY } from "../locales/locales";
+import { MODE } from "@/store/modules/user/const";
 
 export default {
   name: "Header",
@@ -26,24 +28,30 @@ export default {
     return {
       arrayOfLanguage: LANGUAGES,
       selectedLanguage: {
-            name: LANGUAGES.find(lang => lang.id === COUNTRY.RUS).name.toLowerCase()
-          },
-        }
+        name: LANGUAGES.find(lang => lang.id === COUNTRY.RUS).name.toLowerCase()
+      },
+      MODE
+    };
   },
   components: {
     dropdown
   },
 
   computed: {
-    ...mapGetters(["getLang"]),
+    ...mapGetters(["getLang", "getMode"]),
     lang: {
       get() {
         return this.getLang;
       }
     },
+    mode: {
+      get() {
+        return this.getMode;
+      }
+    }
   },
   methods: {
-    ...mapActions(["setLang"]),
+    ...mapActions(["setLang", "setMode"]),
     changeLanguage(lang) {
       this.setLang(lang);
       this.$i18n.i18next.changeLanguage(lang);
@@ -51,6 +59,9 @@ export default {
     methodToRunOnSelect(payload) {
       this.selectedLanguage = payload.name.toLowerCase();
       this.changeLanguage(payload.id);
+    },
+    goPageAuth(){
+      this.setMode(MODE.AUTH)
     }
   }
 };
@@ -80,6 +91,10 @@ export default {
     text-align: start;
     font-size: 15px;
     color: #96b3d2;
+    &.-back {
+      left: 35px;
+      cursor: pointer;
+    }
     & > span {
       cursor: pointer;
       color: #48bdff;
