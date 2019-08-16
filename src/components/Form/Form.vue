@@ -1,12 +1,12 @@
 <template>
   <section class='form'>
-    <form v-on:submit.prevent>
+    <form @submit.prevent>
       <h2 class='form__header'>
         {{ this.mode === MODE.AUTH ? $t('enterSystem') : $t('recovery') }}
       </h2>
       <section class='form__content'>
         <h3
-          class='form__header -instruction'
+          class='form__header form__header-instruction'
           v-if='this.mode === MODE.RECOVERY'
         >
           {{ $t('instruction') }}
@@ -14,7 +14,7 @@
 
         <span
           class='robot__icon'
-          :class='{ smile: !noAuth, sad: noAuth }'
+          :class='{ "robot__icon-smile": !noAuth, "robot__icon-sad": noAuth }'
         ></span>
         <div
           class='form__input'
@@ -198,7 +198,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 .form {
   min-width: 300px;
   z-index: 1;
@@ -215,7 +215,7 @@ export default {
     border-top-right-radius: 8px;
     border-bottom: 1px #e2ebf5 solid;
     margin: 0;
-    &.-instruction {
+    &-instruction {
       max-width: 250px;
       margin: 0 auto;
       padding-top: 0;
@@ -242,10 +242,10 @@ export default {
       height: 80px;
       background-repeat: no-repeat;
       z-index: -1;
-      &.smile {
+      &-smile {
         background-image: url('../../images/robo-smile.svg');
       }
-      &.sad {
+      &-sad {
         background-image: url('../../images/robo-sad.svg');
       }
     }

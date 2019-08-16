@@ -14,7 +14,7 @@
     <DropDown
       :options='arrayOfLanguage'
       :selected='selectedLanguage'
-      v-on:updateOption='methodToRunOnSelect'
+      @updateOption='methodToRunOnSelect'
     >
     </DropDown>
   </header>
@@ -91,7 +91,7 @@ export default {
     position: absolute;
     width: 130px;
     top: 20px;
-    right: 35px;
+    right: 45px;
     text-align: start;
     font-size: 15px;
     color: #96b3d2;
