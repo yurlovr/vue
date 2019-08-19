@@ -1,0 +1,1 @@
+export  const URL_AUTH = 'https://192.168.88.60:8443/api/login'

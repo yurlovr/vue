@@ -1,7 +1,7 @@
 import { postData } from '@/lib/api'
+import { URL_AUTH } from '../../../config'
 
 const NO_AUTH_USER = 'user not found'
-const URL_AUTH = 'https://192.168.88.60:8443/api/login'
 
 export const setUserData = ({ commit }, payload) => {
   if (payload.default) {

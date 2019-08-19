@@ -21,7 +21,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang='scss'>
+body:not(:empty) {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: 'Ubuntu', sans-serif;
   background-color: #e2ebf5;
